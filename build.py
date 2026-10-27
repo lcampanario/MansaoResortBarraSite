@@ -3,7 +3,7 @@
 import os, re, shutil
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DOMAIN = "https://www.SEU-DOMINIO.com.br/"
+DOMAIN = "https://mansaoresortbarra.netlify.app/"
 SEO_TITLE = {
     "pt": "Mansão Resort Barra da Tijuca, Rio de Janeiro | Até 18 hóspedes, 500 m da praia do Posto 6",
     "en": "Mansão Resort Barra da Tijuca, Rio de Janeiro | Up to 18 guests, 500 m from Posto 6 beach",
@@ -100,8 +100,6 @@ T = [
 ('<p class="eyebrow">Duas formas de se hospedar</p>', '<p class="eyebrow">Two ways to stay</p>', '<p class="eyebrow">Dos formas de hospedarse</p>'),
 ('<h2>A casa inteira ou a Villa anexa</h2>', '<h2>The whole house or the Villa annex</h2>', '<h2>La casa completa o la Villa anexa</h2>'),
 ('<p class="lede">Nas duas opções a área de lazer é exclusiva do seu grupo. Escolha pelo tamanho da turma.</p>', '<p class="lede">With either option the leisure area is reserved for your group only. Pick by group size.</p>', '<p class="lede">En las dos opciones el área de ocio es exclusiva de su grupo. Elija según el tamaño del grupo.</p>'),
-('alt="Sala de jantar da casa principal"', 'alt="Dining room in the main house"', 'alt="Comedor de la casa principal"'),
-('<figcaption>sala de jantar</figcaption>', '<figcaption>dining room</figcaption>', '<figcaption>comedor</figcaption>'),
 ('<span class="tag">Casa inteira</span>', '<span class="tag">Whole house</span>', '<span class="tag">Casa completa</span>'),
 ('<h3>Mansão Resort para até 18 hóspedes</h3>', '<h3>Mansão Resort for up to 18 guests</h3>', '<h3>Mansão Resort para hasta 18 huéspedes</h3>'),
 ('<p>A casa principal e o anexo juntos. Ideal para famílias grandes, aniversários e grupos de amigos.</p>', '<p>The main house and the annex together. Ideal for large families, birthdays and groups of friends.</p>', '<p>La casa principal y el anexo juntos. Ideal para familias grandes, cumpleaños y grupos de amigos.</p>'),

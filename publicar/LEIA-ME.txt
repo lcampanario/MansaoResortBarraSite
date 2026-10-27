@@ -13,5 +13,5 @@ CALENDÁRIO DE DISPONIBILIDADE (sincroniza com o Airbnb)
   Publique pelo GitHub (Netlify > Add new site > Import from Git) ou pelo
   Netlify CLI: npx netlify-cli deploy --prod (dentro desta pasta).
 
-Antes de publicar com domínio: troque SEU-DOMINIO.com.br pelo domínio
+Endereço atual: https://mansaoresortbarra.netlify.app/ . Com domínio próprio, troque esse endereço
 (em index.html, en/index.html, es/index.html, robots.txt e sitemap.xml).

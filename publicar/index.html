@@ -6,16 +6,16 @@
 <title>Mansão Resort Barra da Tijuca, Rio de Janeiro | Até 18 hóspedes, 500 m da praia do Posto 6</title>
 <meta name="description" content="Mansão para até 18 hóspedes na Barra da Tijuca, Rio de Janeiro, Brasil. Piscina, spa aquecido, sauna e campo de futebol a 500 m da praia do Posto 6. Casa inteira para até 18 hóspedes ou Villa anexa para até 10. Reserve direto com a anfitriã.">
 <meta name="keywords" content="casa para temporada Barra da Tijuca, mansão aluguel Rio de Janeiro, casa com piscina Barra da Tijuca, casa para 18 pessoas Rio de Janeiro, casa até 18 hóspedes Barra da Tijuca, aluguel temporada Rio de Janeiro Brasil, casa Posto 6 Barra, aluguel por temporada Barra">
-<link rel="canonical" href="https://www.SEU-DOMINIO.com.br/">
-<link rel="alternate" hreflang="pt-BR" href="https://www.SEU-DOMINIO.com.br/">
-<link rel="alternate" hreflang="en" href="https://www.SEU-DOMINIO.com.br/en/">
-<link rel="alternate" hreflang="es" href="https://www.SEU-DOMINIO.com.br/es/">
-<link rel="alternate" hreflang="x-default" href="https://www.SEU-DOMINIO.com.br/">
+<link rel="canonical" href="https://mansaoresortbarra.netlify.app/">
+<link rel="alternate" hreflang="pt-BR" href="https://mansaoresortbarra.netlify.app/">
+<link rel="alternate" hreflang="en" href="https://mansaoresortbarra.netlify.app/en/">
+<link rel="alternate" hreflang="es" href="https://mansaoresortbarra.netlify.app/es/">
+<link rel="alternate" hreflang="x-default" href="https://mansaoresortbarra.netlify.app/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:title" content="Mansão Resort Barra da Tijuca, Rio de Janeiro · Até 18 hóspedes">
 <meta property="og:description" content="Piscina, spa aquecido, sauna e campo de futebol privativos. Até 18 hóspedes. Reserva direta, sem taxas de plataforma.">
-<meta property="og:image" content="https://www.SEU-DOMINIO.com.br/images/capa.jpg">
+<meta property="og:image" content="https://mansaoresortbarra.netlify.app/images/capa.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,8 +27,8 @@
   "name": "Mansão Resort Barra da Tijuca",
   "alternateName": "Mansão Resort Barra da Tijuca, Rio de Janeiro, Brasil, para até 18 hóspedes",
   "description": "Casa de alto padrão com 590 m² construídos, piscina, spa aquecido para 8 pessoas, sauna a vapor e campo de futebol sintético de 280 m², a cerca de 500 m da praia do Posto 6.",
-  "url": "https://www.SEU-DOMINIO.com.br/",
-  "image": ["https://www.SEU-DOMINIO.com.br/images/capa.jpg"],
+  "url": "https://mansaoresortbarra.netlify.app/",
+  "image": ["https://mansaoresortbarra.netlify.app/images/capa.jpg"],
   "address": {"@type": "PostalAddress", "addressLocality": "Rio de Janeiro", "addressRegion": "RJ", "addressCountry": "BR", "streetAddress": "Barra da Tijuca"},
   "keywords": "Barra da Tijuca, Rio de Janeiro, Brasil, até 18 hóspedes, casa para temporada, mansão com piscina",
   "numberOfRooms": 6,
@@ -347,7 +347,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       <div class="hero-photos">
         <figure class="ph" style="margin:0"><img src="images/capa.jpg" alt="Área da piscina da Mansão Resort Barra" loading="eager"><figcaption>piscina e área externa</figcaption></figure>
         <figure class="ph" style="margin:0"><img src="images/spa.jpg" alt="Spa aquecido para 8 pessoas" loading="lazy"><figcaption>spa aquecido</figcaption></figure>
-        <figure class="ph" style="margin:0"><img src="images/campo.jpg" alt="Campo de futebol sintético de 280 m²" loading="lazy"><figcaption>campo de futebol</figcaption></figure>
+        <figure class="ph" style="margin:0"><img src="images/lazer-gourmet.jpg" alt="Lounge com piscina e espaço gourmet ao fundo" loading="lazy"><figcaption>espaço gourmet</figcaption></figure>
       </div>
     </div>
   </section>
@@ -370,7 +370,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       </div>
       <div class="stays">
         <article class="stay">
-          <figure class="ph" style="margin:0"><img src="images/galeria/salajantar1.jpg" alt="Sala de jantar da casa principal" loading="lazy"><figcaption>sala de jantar</figcaption></figure>
+          <figure class="ph" style="margin:0"><img src="images/campo.jpg" alt="Campo de futebol sintético de 280 m²" loading="lazy"><figcaption>campo de futebol</figcaption></figure>
           <div class="stay-body">
             <span class="tag">Casa inteira</span>
             <h3>Mansão Resort para até 18 hóspedes</h3>
@@ -554,7 +554,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
             <a class="btn" id="wa" href="#" target="_blank" rel="noopener">Abrir no WhatsApp</a>
             <button class="btn btn--ghost" type="button" id="copy">Copiar mensagem</button>
           </div>
-          <p class="note">WhatsApp da anfitriã: <span id="wa-num"></span></p>
+          <p class="note">WhatsApp da anfitriã: <a id="wa-num" href="#" target="_blank" rel="noopener"></a></p>
           <p class="note">Próximo passo: com as datas confirmadas, você recebe o link do Mercado Pago para pagar por Pix ou cartão.</p>
         </div>
       </form>
@@ -688,6 +688,7 @@ const out = document.getElementById("out");
 const outText = document.getElementById("out-text");
 const wa = document.getElementById("wa");
 document.getElementById("wa-num").textContent = "+" + WHATSAPP.replace(/^(\d{2})(\d{2})(\d{5})(\d{4})$/, "$1 $2 $3-$4");
+document.getElementById("wa-num").href = `https://api.whatsapp.com/send?phone=${WHATSAPP}`;
 
 const iso = d => d.toISOString().slice(0, 10);
 const today = new Date();
@@ -774,7 +775,7 @@ form.addEventListener("submit", e => {
     `Hóspedes: ${g}\nNome: ${form.name.value.trim()}`;
   if (form.msg.value.trim()) text += `\n\n${form.msg.value.trim()}`;
   outText.textContent = text;
-  wa.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
+  wa.href = `https://api.whatsapp.com/send?phone=${WHATSAPP}&text=${encodeURIComponent(text)}`;
   out.hidden = false;
 });
 

@@ -6,16 +6,16 @@
 <title>Mansão Resort Barra da Tijuca, Rio de Janeiro | Up to 18 guests, 500 m from Posto 6 beach</title>
 <meta name="description" content="Mansion for up to 18 guests in Barra da Tijuca, Rio de Janeiro, Brazil. Pool, heated spa, sauna and football pitch, 500 m from Posto 6 beach. Whole house for up to 18 guests or the Villa annex for up to 10. Book directly with the host.">
 <meta name="keywords" content="vacation rental Barra da Tijuca, mansion rental Rio de Janeiro, house with pool Barra da Tijuca, house for 18 people Rio de Janeiro, villa for large groups Rio de Janeiro Brazil, Posto 6 Barra beach house">
-<link rel="canonical" href="https://www.SEU-DOMINIO.com.br/en/">
-<link rel="alternate" hreflang="pt-BR" href="https://www.SEU-DOMINIO.com.br/">
-<link rel="alternate" hreflang="en" href="https://www.SEU-DOMINIO.com.br/en/">
-<link rel="alternate" hreflang="es" href="https://www.SEU-DOMINIO.com.br/es/">
-<link rel="alternate" hreflang="x-default" href="https://www.SEU-DOMINIO.com.br/">
+<link rel="canonical" href="https://mansaoresortbarra.netlify.app/en/">
+<link rel="alternate" hreflang="pt-BR" href="https://mansaoresortbarra.netlify.app/">
+<link rel="alternate" hreflang="en" href="https://mansaoresortbarra.netlify.app/en/">
+<link rel="alternate" hreflang="es" href="https://mansaoresortbarra.netlify.app/es/">
+<link rel="alternate" hreflang="x-default" href="https://mansaoresortbarra.netlify.app/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:title" content="Mansão Resort Barra da Tijuca, Rio de Janeiro · Up to 18 guests">
 <meta property="og:description" content="Private pool, heated spa, sauna and football pitch. Up to 18 guests. Direct booking, no platform fees.">
-<meta property="og:image" content="https://www.SEU-DOMINIO.com.br/images/capa.jpg">
+<meta property="og:image" content="https://mansaoresortbarra.netlify.app/images/capa.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,8 +27,8 @@
   "name": "Mansão Resort Barra da Tijuca",
   "alternateName": "Mansão Resort Barra da Tijuca, Rio de Janeiro, Brazil, for up to 18 guests",
   "description": "High-end 590 m² house with pool, heated spa for 8, steam sauna and a 280 m² synthetic football pitch, about 500 m from Posto 6 beach.",
-  "url": "https://www.SEU-DOMINIO.com.br/en/",
-  "image": ["https://www.SEU-DOMINIO.com.br/images/capa.jpg"],
+  "url": "https://mansaoresortbarra.netlify.app/en/",
+  "image": ["https://mansaoresortbarra.netlify.app/images/capa.jpg"],
   "address": {"@type": "PostalAddress", "addressLocality": "Rio de Janeiro", "addressRegion": "RJ", "addressCountry": "BR", "streetAddress": "Barra da Tijuca"},
   "keywords": "Barra da Tijuca, Rio de Janeiro, Brazil, up to 18 guests, vacation rental, mansion with pool",
   "numberOfRooms": 6,
@@ -347,7 +347,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       <div class="hero-photos">
         <figure class="ph" style="margin:0"><img src="../images/capa.jpg" alt="Pool area at Mansão Resort Barra" loading="eager"><figcaption>pool and outdoor area</figcaption></figure>
         <figure class="ph" style="margin:0"><img src="../images/spa.jpg" alt="Heated spa for 8 people" loading="lazy"><figcaption>heated spa</figcaption></figure>
-        <figure class="ph" style="margin:0"><img src="../images/campo.jpg" alt="280 m² synthetic football pitch" loading="lazy"><figcaption>football pitch</figcaption></figure>
+        <figure class="ph" style="margin:0"><img src="../images/lazer-gourmet.jpg" alt="Lounge with pool and barbecue area behind" loading="lazy"><figcaption>barbecue area</figcaption></figure>
       </div>
     </div>
   </section>
@@ -370,7 +370,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       </div>
       <div class="stays">
         <article class="stay">
-          <figure class="ph" style="margin:0"><img src="../images/galeria/salajantar1.jpg" alt="Dining room in the main house" loading="lazy"><figcaption>dining room</figcaption></figure>
+          <figure class="ph" style="margin:0"><img src="../images/campo.jpg" alt="280 m² synthetic football pitch" loading="lazy"><figcaption>football pitch</figcaption></figure>
           <div class="stay-body">
             <span class="tag">Whole house</span>
             <h3>Mansão Resort for up to 18 guests</h3>
@@ -554,7 +554,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
             <a class="btn" id="wa" href="#" target="_blank" rel="noopener">Open in WhatsApp</a>
             <button class="btn btn--ghost" type="button" id="copy">Copy message</button>
           </div>
-          <p class="note">Host WhatsApp: <span id="wa-num"></span></p>
+          <p class="note">Host WhatsApp: <a id="wa-num" href="#" target="_blank" rel="noopener"></a></p>
           <p class="note">Next step: once the dates are confirmed, you get the Mercado Pago link to pay by Pix or card.</p>
         </div>
       </form>
@@ -688,6 +688,7 @@ const out = document.getElementById("out");
 const outText = document.getElementById("out-text");
 const wa = document.getElementById("wa");
 document.getElementById("wa-num").textContent = "+" + WHATSAPP.replace(/^(\d{2})(\d{2})(\d{5})(\d{4})$/, "$1 $2 $3-$4");
+document.getElementById("wa-num").href = `https://api.whatsapp.com/send?phone=${WHATSAPP}`;
 
 const iso = d => d.toISOString().slice(0, 10);
 const today = new Date();
@@ -774,7 +775,7 @@ form.addEventListener("submit", e => {
     `Guests: ${g}\nName: ${form.name.value.trim()}`;
   if (form.msg.value.trim()) text += `\n\n${form.msg.value.trim()}`;
   outText.textContent = text;
-  wa.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
+  wa.href = `https://api.whatsapp.com/send?phone=${WHATSAPP}&text=${encodeURIComponent(text)}`;
   out.hidden = false;
 });
 
