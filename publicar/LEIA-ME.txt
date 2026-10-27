@@ -1,0 +1,17 @@
+Pasta pronta para publicar o site da Mansão Resort Barra.
+
+O site tem 3 idiomas: português (raiz), inglês (en/) e espanhol (es/).
+Para mudar textos: edite site/index.html e rode python3 build.py.
+
+CALENDÁRIO DE DISPONIBILIDADE (sincroniza com o Airbnb)
+- A função netlify/functions/disponibilidade.mjs lê os calendários dos dois anúncios
+  e o site mostra as datas ocupadas. Atualiza sozinho a cada hora.
+- Os dois links já estão no arquivo da função. Para trocar, no Netlify: Site configuration > Environment variables, crie
+    ICAL_CASA  = link "Exportar calendário" do anúncio da casa inteira
+    ICAL_VILLA = link "Exportar calendário" do anúncio da Villa
+- Funções do Netlify não rodam no "arrastar e soltar" (Netlify Drop).
+  Publique pelo GitHub (Netlify > Add new site > Import from Git) ou pelo
+  Netlify CLI: npx netlify-cli deploy --prod (dentro desta pasta).
+
+Antes de publicar com domínio: troque SEU-DOMINIO.com.br pelo domínio
+(em index.html, en/index.html, es/index.html, robots.txt e sitemap.xml).
