@@ -175,6 +175,7 @@ T = [
 ('id="lb-next">Próxima</button>', 'id="lb-next">Next</button>', 'id="lb-next">Siguiente</button>'),
 ('id="lb-close">Fechar</button>', 'id="lb-close">Close</button>', 'id="lb-close">Cerrar</button>'),
 # ---- booking
+('<button type="button" data-go="0" aria-pressed="true">Casa inteira · 18</button><button type="button" data-go="1" aria-pressed="false">Villa anexa · 10</button>', '<button type="button" data-go="0" aria-pressed="true">Entire house · 18</button><button type="button" data-go="1" aria-pressed="false">Villa annex · 10</button>', '<button type="button" data-go="0" aria-pressed="true">Casa entera · 18</button><button type="button" data-go="1" aria-pressed="false">Villa anexa · 10</button>'),
 ('<p class="eyebrow">Reserva direta</p>', '<p class="eyebrow">Direct booking</p>', '<p class="eyebrow">Reserva directa</p>'),
 ('>Fale direto com a anfitriã</h2>', '>Talk directly with the host</h2>', '>Hable directamente con la anfitriona</h2>'),
 ('<p class="lede">Informe as datas e o tamanho do grupo. A mensagem chega pronta no WhatsApp e você recebe disponibilidade e valor.</p>', '<p class="lede">Enter your dates and group size. The message opens ready to send in WhatsApp, and you get availability and price back.</p>', '<p class="lede">Indique las fechas y el tamaño del grupo. El mensaje llega listo a WhatsApp y usted recibe disponibilidad y precio.</p>'),

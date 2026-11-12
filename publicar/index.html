@@ -137,19 +137,20 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .ph.has-img figcaption { color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
 
 /* hero */
-.hero { padding-block: clamp(32px, 5vw, 56px) clamp(48px, 7vw, 80px); }
+.hero { padding-block: clamp(20px, 3vw, 36px); }
 .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(24px, 4vw, 48px); align-items: center; }
-.hero h1 { font-size: var(--step-4); font-weight: 800; }
+.hero h1 { font-size: clamp(1.45rem, 3vw, 2.2rem); font-weight: 800; line-height: 1.15; }
+.hero .lede { font-size: 1rem; }
 .hero h1 em { font-style: normal; color: var(--lagoon); }
 :root[data-theme="dark"] .hero h1 em { color: var(--sun); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hero h1 em { color: var(--sun); } }
-.hero-copy { display: grid; gap: 20px; min-width: 0; }
+.hero-copy { display: grid; gap: 14px; min-width: 0; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .facts { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 0.95rem; color: var(--muted); padding: 0; margin: 4px 0 0; list-style: none; }
 .facts b { color: var(--ink); font-weight: 600; }
-.hero-photos { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; aspect-ratio: 5 / 4; max-width: 100%; }
+.hero-photos { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; aspect-ratio: 16 / 10; max-width: 100%; }
 .hero-photos .ph:first-child { grid-row: span 2; }
-@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } .hero-photos, .hero-actions, .hero .lede { display: none; } }
 
 /* distance strip */
 .distances { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -174,7 +175,24 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .rooms li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 8px; }
 .rooms li span:first-child { color: var(--muted); }
 .stay .btn { margin-top: 6px; justify-self: start; }
-@media (max-width: 860px) { .stays { grid-template-columns: 1fr; } }
+@media (max-width: 860px) {
+  .stays { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin-inline: -16px; padding: 0 16px 6px; scroll-padding-inline: 16px; scrollbar-width: none; }
+  .stays::-webkit-scrollbar { display: none; }
+  .stays .stay { flex: 0 0 88%; scroll-snap-align: start; }
+}
+.stay-tabs { display: none; gap: 8px; margin-bottom: 14px; }
+@media (max-width: 860px) { .stay-tabs { display: flex; } }
+.stay-tabs button { font: 600 0.92rem var(--font-body); padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.stay-tabs button[aria-pressed="true"] { background: var(--lagoon); color: var(--lagoon-ink); border-color: var(--lagoon); }
+/* carrossel de fotos de cada anúncio */
+.car { position: relative; }
+.car-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; aspect-ratio: 16 / 10; scrollbar-width: none; overscroll-behavior-x: contain; }
+.car-track::-webkit-scrollbar { display: none; }
+.stay .car-track .ph { flex: 0 0 100%; scroll-snap-align: start; aspect-ratio: auto; height: 100%; }
+.car-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 38px; height: 38px; border-radius: 50%; border: 0; background: rgba(0,0,0,.45); color: #fff; font: 600 1.3rem/1 var(--font-body); cursor: pointer; }
+.car-btn:disabled { opacity: .3; cursor: default; }
+.car-prev { left: 10px; } .car-next { right: 10px; }
+.car-count { position: absolute; right: 10px; top: 10px; z-index: 2; background: rgba(0,0,0,.5); color: #fff; font-size: 0.78rem; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
 
 /* leisure */
 .leisure { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; }
@@ -198,6 +216,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 @media (max-width: 520px) { .amen { grid-template-columns: 1fr; } }
 
 /* booking */
+@media (max-width: 860px) { .book-why > .lede { display: none; } }
 .book-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
 @media (max-width: 860px) { .book-grid { grid-template-columns: minmax(0, 1fr); } }
 [hidden] { display: none !important; }
@@ -363,6 +382,62 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     </div>
   </section>
 
+  <section class="band band--lagoon" id="reservar" style="--line: rgba(255,255,255,.18);padding-block:clamp(28px,5vw,64px)">
+    <div class="wrap book-grid">
+      <div class="book-why">
+        <p class="eyebrow">Reserva direta</p>
+        <h2 style="font-size:var(--step-2)">Fale direto com a anfitriã</h2>
+        <p class="lede">Informe as datas e o tamanho do grupo. A mensagem chega pronta no WhatsApp e você recebe disponibilidade e valor.</p>
+        <div class="cal" id="cal" aria-label="Calendário de disponibilidade">
+          <div class="cal-head">
+            <button type="button" id="cal-prev" aria-label="Mês anterior">‹</button>
+            <b>Disponibilidade</b>
+            <button type="button" id="cal-next" aria-label="Próximo mês">›</button>
+          </div>
+          <div class="cal-months" id="cal-months"></div>
+          <div class="cal-legend"><span><i class="k-busy"></i>Ocupado</span><span><i class="k-sel"></i>Suas datas</span><span id="k-price" hidden>Valores por noite em R$</span><span>Toque no dia de chegada e depois no de saída.</span></div>
+          <p class="cal-status" id="cal-status">Carregando disponibilidade...</p>
+        </div>
+        <ul class="why">
+          <li><b>Sem taxa de serviço da plataforma</b><span style="color:inherit;opacity:.8">Você paga só a hospedagem combinada.</span></li>
+          <li><b>Resposta rápida</b><span style="color:inherit;opacity:.8">A anfitriã responde 100% das mensagens, em geral em até 1 hora.</span></li>
+          <li><b>Pagamento online seguro</b><span style="color:inherit;opacity:.8">Depois de confirmar as datas no WhatsApp, você recebe um link do Mercado Pago para pagar por Pix ou cartão de crédito.</span></li>
+          <li><b>Hóspedes nota 5,0</b><span style="color:inherit;opacity:.8">Avaliação máxima no Airbnb em limpeza, check-in, comunicação e localização.</span></li>
+        </ul>
+      </div>
+      <form class="book" id="book" novalidate style="color:var(--ink);--line:var(--line-card)">
+        <fieldset>
+          <legend>Acomodação</legend>
+          <div class="choice">
+            <label><input type="radio" name="stay" id="stay-casa" value="casa" checked><span><b>Casa inteira</b><small>até 18 hóspedes</small></span></label>
+            <label><input type="radio" name="stay" id="stay-villa" value="villa"><span><b>Villa anexa</b><small>até 10 hóspedes</small></span></label>
+          </div>
+        </fieldset>
+        <div class="row">
+          <label for="checkin">Check-in<input type="date" id="checkin" name="checkin" required></label>
+          <label for="checkout">Check-out<input type="date" id="checkout" name="checkout" required></label>
+        </div>
+        <div class="row">
+          <label for="guests">Hóspedes<input type="number" id="guests" name="guests" min="1" max="18" value="12" required></label>
+          <label for="name">Seu nome<input type="text" id="name" name="name" autocomplete="name" placeholder="Nome e sobrenome" required></label>
+        </div>
+        <label for="msg">Mensagem (opcional)<textarea id="msg" name="msg" placeholder="Ocasião, pets, horário de chegada..."></textarea></label>
+        <p class="quote" id="quote" hidden></p>
+        <p class="err" id="err" hidden></p>
+        <button class="btn" type="submit">Enviar pelo WhatsApp</button>
+        <div class="out" id="out" hidden>
+          <pre id="out-text"></pre>
+          <div class="out-actions">
+            <a class="btn" id="wa" href="#" target="_blank" rel="noopener">Abrir no WhatsApp</a>
+            <button class="btn btn--ghost" type="button" id="copy">Copiar mensagem</button>
+          </div>
+          <p class="note">WhatsApp da anfitriã: <a id="wa-num" href="#" target="_blank" rel="noopener"></a></p>
+          <p class="note">Próximo passo: com as datas confirmadas, você recebe o link do Mercado Pago para pagar por Pix ou cartão.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
   <div class="wrap">
     <div class="distances" id="localizacao">
       <div><strong>500 m</strong><span>praia do Posto 6</span></div>
@@ -379,9 +454,10 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         <h2>A casa inteira ou a Villa anexa</h2>
         <p class="lede">Nas duas opções a área de lazer é exclusiva do seu grupo. Escolha pelo tamanho da turma.</p>
       </div>
+      <div class="stay-tabs"><button type="button" data-go="0" aria-pressed="true">Casa inteira · 18</button><button type="button" data-go="1" aria-pressed="false">Villa anexa · 10</button></div>
       <div class="stays">
         <article class="stay">
-          <figure class="ph" style="margin:0"><img src="images/campo.jpg" alt="Campo de futebol sintético de 280 m²" loading="lazy"><figcaption>campo de futebol</figcaption></figure>
+          <div class="car" data-car="casa"><div class="car-track"><figure class="ph" style="margin:0"><img src="images/campo.jpg" alt="Campo de futebol sintético de 280 m²" loading="lazy"><figcaption>campo de futebol</figcaption></figure></div></div>
           <div class="stay-body">
             <span class="tag">Casa inteira</span>
             <h3>Mansão Resort para até 18 hóspedes</h3>
@@ -406,7 +482,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           </div>
         </article>
         <article class="stay">
-          <figure class="ph" style="margin:0"><img src="images/villa.jpg" alt="Piscina em frente à Villa anexa" loading="lazy"><figcaption>Villa anexa</figcaption></figure>
+          <div class="car" data-car="villa"><div class="car-track"><figure class="ph" style="margin:0"><img src="images/villa.jpg" alt="Piscina em frente à Villa anexa" loading="lazy"><figcaption>Villa anexa</figcaption></figure></div></div>
           <div class="stay-body">
             <span class="tag">Villa anexa</span>
             <h3>Villa Resort para até 10 hóspedes</h3>
@@ -519,61 +595,6 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     </div>
   </section>
 
-  <section class="band band--lagoon" id="reservar" style="--line: rgba(255,255,255,.18)">
-    <div class="wrap book-grid">
-      <div class="book-why">
-        <p class="eyebrow">Reserva direta</p>
-        <h2 style="font-size:var(--step-3)">Fale direto com a anfitriã</h2>
-        <p class="lede">Informe as datas e o tamanho do grupo. A mensagem chega pronta no WhatsApp e você recebe disponibilidade e valor.</p>
-        <ul class="why">
-          <li><b>Sem taxa de serviço da plataforma</b><span style="color:inherit;opacity:.8">Você paga só a hospedagem combinada.</span></li>
-          <li><b>Resposta rápida</b><span style="color:inherit;opacity:.8">A anfitriã responde 100% das mensagens, em geral em até 1 hora.</span></li>
-          <li><b>Pagamento online seguro</b><span style="color:inherit;opacity:.8">Depois de confirmar as datas no WhatsApp, você recebe um link do Mercado Pago para pagar por Pix ou cartão de crédito.</span></li>
-          <li><b>Hóspedes nota 5,0</b><span style="color:inherit;opacity:.8">Avaliação máxima no Airbnb em limpeza, check-in, comunicação e localização.</span></li>
-        </ul>
-        <div class="cal" id="cal" aria-label="Calendário de disponibilidade">
-          <div class="cal-head">
-            <button type="button" id="cal-prev" aria-label="Mês anterior">‹</button>
-            <b>Disponibilidade</b>
-            <button type="button" id="cal-next" aria-label="Próximo mês">›</button>
-          </div>
-          <div class="cal-months" id="cal-months"></div>
-          <div class="cal-legend"><span><i class="k-busy"></i>Ocupado</span><span><i class="k-sel"></i>Suas datas</span><span id="k-price" hidden>Valores por noite em R$</span><span>Toque no dia de chegada e depois no de saída.</span></div>
-          <p class="cal-status" id="cal-status">Carregando disponibilidade...</p>
-        </div>
-      </div>
-      <form class="book" id="book" novalidate style="color:var(--ink);--line:var(--line-card)">
-        <fieldset>
-          <legend>Acomodação</legend>
-          <div class="choice">
-            <label><input type="radio" name="stay" id="stay-casa" value="casa" checked><span><b>Casa inteira</b><small>até 18 hóspedes</small></span></label>
-            <label><input type="radio" name="stay" id="stay-villa" value="villa"><span><b>Villa anexa</b><small>até 10 hóspedes</small></span></label>
-          </div>
-        </fieldset>
-        <div class="row">
-          <label for="checkin">Check-in<input type="date" id="checkin" name="checkin" required></label>
-          <label for="checkout">Check-out<input type="date" id="checkout" name="checkout" required></label>
-        </div>
-        <div class="row">
-          <label for="guests">Hóspedes<input type="number" id="guests" name="guests" min="1" max="18" value="12" required></label>
-          <label for="name">Seu nome<input type="text" id="name" name="name" autocomplete="name" placeholder="Nome e sobrenome" required></label>
-        </div>
-        <label for="msg">Mensagem (opcional)<textarea id="msg" name="msg" placeholder="Ocasião, pets, horário de chegada..."></textarea></label>
-        <p class="quote" id="quote" hidden></p>
-        <p class="err" id="err" hidden></p>
-        <button class="btn" type="submit">Enviar pelo WhatsApp</button>
-        <div class="out" id="out" hidden>
-          <pre id="out-text"></pre>
-          <div class="out-actions">
-            <a class="btn" id="wa" href="#" target="_blank" rel="noopener">Abrir no WhatsApp</a>
-            <button class="btn btn--ghost" type="button" id="copy">Copiar mensagem</button>
-          </div>
-          <p class="note">WhatsApp da anfitriã: <a id="wa-num" href="#" target="_blank" rel="noopener"></a></p>
-          <p class="note">Próximo passo: com as datas confirmadas, você recebe o link do Mercado Pago para pagar por Pix ou cartão.</p>
-        </div>
-      </form>
-    </div>
-  </section>
 
   <section class="band">
     <div class="wrap">
@@ -687,6 +708,35 @@ VIDEOS.forEach(([id, kind], i) => {
   });
   vids.appendChild(box);
 });
+
+// Carrossel de fotos de cada anúncio (as legendas vêm da galeria)
+const CAR = {
+  casa: ["dsc-4277", "solarium-2", "solarium-1", "dsc-4250", "dsc-4148", "salajantar1", "salajantar-3", "201-a", "202-d", "201-ban-a", "campo-1"],
+  villa: ["101-d", "103-c", "102-1", "103-b", "101-ban1", "103-e", "solarium-4"],
+};
+document.querySelectorAll("[data-car]").forEach(car => {
+  const track = car.querySelector(".car-track");
+  CAR[car.dataset.car].forEach(f => {
+    const p = PHOTOS.find(x => x[1] === f); if (!p) return;
+    track.insertAdjacentHTML("beforeend", `<figure class="ph" style="margin:0"><img src="${G}${f}.jpg" alt="${p[2]}" loading="lazy"><figcaption>${p[2]}</figcaption></figure>`);
+  });
+  const n = track.children.length;
+  car.insertAdjacentHTML("beforeend", `<button type="button" class="car-btn car-prev" aria-label="‹">‹</button><button type="button" class="car-btn car-next" aria-label="›">›</button><span class="car-count">1 / ${n}</span>`);
+  const prev = car.querySelector(".car-prev"), next = car.querySelector(".car-next"), count = car.querySelector(".car-count");
+  const at = () => Math.round(track.scrollLeft / track.clientWidth);
+  const sync = () => { const i = at(); count.textContent = `${i + 1} / ${n}`; prev.disabled = i === 0; next.disabled = i === n - 1; };
+  prev.addEventListener("click", () => track.scrollBy({ left: -track.clientWidth, behavior: "smooth" }));
+  next.addEventListener("click", () => track.scrollBy({ left: track.clientWidth, behavior: "smooth" }));
+  track.addEventListener("scroll", () => requestAnimationFrame(sync), { passive: true });
+  sync();
+});
+// No celular, os dois anúncios também viram um carrossel; os botões acima levam a cada um.
+const staysEl = document.querySelector(".stays"), tabs = document.querySelectorAll(".stay-tabs button");
+tabs.forEach(t => t.addEventListener("click", () => staysEl.children[+t.dataset.go].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })));
+staysEl.addEventListener("scroll", () => {
+  const i = Math.round(staysEl.scrollLeft / (staysEl.children[0].offsetWidth + 14));
+  tabs.forEach((t, k) => t.setAttribute("aria-pressed", k === i));
+}, { passive: true });
 
 document.querySelectorAll(".ph img").forEach(img => {
   const ok = () => img.closest(".ph").classList.add("has-img");
