@@ -222,15 +222,18 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 [hidden] { display: none !important; }
 .book-why { display: grid; gap: 18px; min-width: 0; }
 .why { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 14px; }
+.book-grid > .why { grid-column: 1 / -1; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+@media (max-width: 1000px) { .book-grid > .why { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .book-grid > .why { grid-template-columns: 1fr; } }
 .why li { display: grid; gap: 2px; padding-left: 16px; border-left: 3px solid var(--sun); }
 .why b { font-weight: 600; }
 .why span { color: var(--muted); font-size: 0.97rem; }
 form.book { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(20px, 3vw, 32px); display: grid; gap: 16px; min-width: 0; }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .row { gap: 10px; } form.book { gap: 12px; } }
 label { display: grid; gap: 6px; font-size: 0.92rem; font-weight: 600; }
 input, select, textarea { font: 400 1rem var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; width: 100%; min-width: 0; }
-textarea { resize: vertical; min-height: 84px; }
+textarea { resize: vertical; min-height: 52px; height: 52px; }
 fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
 legend { font-size: 0.92rem; font-weight: 600; margin-bottom: 6px; }
 .choice { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -239,7 +242,7 @@ legend { font-size: 0.92rem; font-weight: 600; margin-bottom: 6px; }
 .choice input { width: auto; margin-top: 4px; accent-color: var(--lagoon); }
 .choice b { display: block; font-weight: 600; }
 .choice small { color: var(--muted); }
-@media (max-width: 520px) { .choice { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .choice label { padding: 10px 8px; gap: 6px; } .choice small { font-size: 0.8rem; } }
 .err { color: #b3261e; font-size: 0.9rem; }
 :root[data-theme="dark"] .err { color: #ff8a80; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .err { color: #ff8a80; } }
@@ -398,12 +401,6 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           <div class="cal-legend"><span><i class="k-busy"></i>Ocupado</span><span><i class="k-sel"></i>Suas datas</span><span id="k-price" hidden>Valores por noite em R$</span><span>Toque no dia de chegada e depois no de saída.</span></div>
           <p class="cal-status" id="cal-status">Carregando disponibilidade...</p>
         </div>
-        <ul class="why">
-          <li><b>Sem taxa de serviço da plataforma</b><span style="color:inherit;opacity:.8">Você paga só a hospedagem combinada.</span></li>
-          <li><b>Resposta rápida</b><span style="color:inherit;opacity:.8">A anfitriã responde 100% das mensagens, em geral em até 1 hora.</span></li>
-          <li><b>Pagamento online seguro</b><span style="color:inherit;opacity:.8">Depois de confirmar as datas no WhatsApp, você recebe um link do Mercado Pago para pagar por Pix ou cartão de crédito.</span></li>
-          <li><b>Hóspedes nota 5,0</b><span style="color:inherit;opacity:.8">Avaliação máxima no Airbnb em limpeza, check-in, comunicação e localização.</span></li>
-        </ul>
       </div>
       <form class="book" id="book" novalidate style="color:var(--ink);--line:var(--line-card)">
         <fieldset>
@@ -435,6 +432,12 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           <p class="note">Próximo passo: com as datas confirmadas, você recebe o link do Mercado Pago para pagar por Pix ou cartão.</p>
         </div>
       </form>
+      <ul class="why">
+          <li><b>Sem taxa de serviço da plataforma</b><span style="color:inherit;opacity:.8">Você paga só a hospedagem combinada.</span></li>
+          <li><b>Resposta rápida</b><span style="color:inherit;opacity:.8">A anfitriã responde 100% das mensagens, em geral em até 1 hora.</span></li>
+          <li><b>Pagamento online seguro</b><span style="color:inherit;opacity:.8">Depois de confirmar as datas no WhatsApp, você recebe um link do Mercado Pago para pagar por Pix ou cartão de crédito.</span></li>
+          <li><b>Hóspedes nota 5,0</b><span style="color:inherit;opacity:.8">Avaliação máxima no Airbnb em limpeza, check-in, comunicação e localização.</span></li>
+        </ul>
     </div>
   </section>
 
