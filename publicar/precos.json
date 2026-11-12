@@ -1,0 +1,10 @@
+{
+  "_como_editar": "Valores em reais por noite, só números (ex.: 2500). Deixe null para esconder o preço no site. 'sexta_e_sabado' vale para as noites de sexta e sábado. Em 'temporadas', 'de' e 'ate' são a primeira e a última NOITE do período. Em 'datas', dá para fixar o preço de um dia específico, ex.: \"2026-12-24\": {\"casa\": 6000, \"villa\": 3000}.",
+  "casa": { "noite": null, "sexta_e_sabado": null, "minimo_noites": 2, "taxa_limpeza": 0 },
+  "villa": { "noite": null, "sexta_e_sabado": null, "minimo_noites": 2, "taxa_limpeza": 0 },
+  "temporadas": [
+    { "nome": "Réveillon", "de": "2026-12-28", "ate": "2027-01-01", "casa": null, "villa": null, "minimo_noites": 5 },
+    { "nome": "Carnaval", "de": "2027-02-05", "ate": "2027-02-09", "casa": null, "villa": null, "minimo_noites": 4 }
+  ],
+  "datas": {}
+}

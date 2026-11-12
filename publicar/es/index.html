@@ -199,6 +199,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 /* booking */
 .book-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
+@media (max-width: 860px) { .book-grid { grid-template-columns: minmax(0, 1fr); } }
+[hidden] { display: none !important; }
 .book-why { display: grid; gap: 18px; min-width: 0; }
 .why { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 14px; }
 .why li { display: grid; gap: 2px; padding-left: 16px; border-left: 3px solid var(--sun); }
@@ -282,7 +284,7 @@ dialog.lb::backdrop { background: rgba(5, 14, 16, 0.88); }
 .cal-months { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 @media (max-width: 1000px) { .cal-months { grid-template-columns: 1fr; } .cal-months .cal-month:nth-child(2) { display: none; } }
 .cal-month h4 { margin: 0 0 6px; font: 600 0.95rem var(--font-body); }
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; font-variant-numeric: tabular-nums; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; font-variant-numeric: tabular-nums; }
 .cal-grid .dow { font-size: 0.72rem; color: var(--muted); text-align: center; padding-bottom: 4px; text-transform: uppercase; }
 .cal-grid button { all: unset; box-sizing: border-box; text-align: center; padding: 7px 0; border-radius: 8px; font-size: 0.9rem; cursor: pointer; }
 .cal-grid button:hover { background: var(--bg); }
@@ -290,18 +292,27 @@ dialog.lb::backdrop { background: rgba(5, 14, 16, 0.88); }
 .cal-grid button[disabled] { cursor: default; }
 .cal-grid .past { color: var(--muted); opacity: .45; }
 .cal-grid .busy { color: var(--muted); text-decoration: line-through; background: repeating-linear-gradient(135deg, transparent 0 4px, var(--line) 4px 5px); }
-.cal-grid .sel { background: var(--lagoon); color: var(--lagoon-ink); }
+.cal-grid .sel, .cal-grid .sel:hover { background: var(--lagoon); color: var(--lagoon-ink); }
 .cal-grid .range { background: color-mix(in srgb, var(--lagoon) 18%, transparent); }
 .cal-legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.82rem; color: var(--muted); }
 .cal-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; border: 1px solid var(--line); }
 .cal-legend .k-busy { background: repeating-linear-gradient(135deg, transparent 0 3px, var(--muted) 3px 4px); }
 .cal-legend .k-sel { background: var(--lagoon); border-color: var(--lagoon); }
 .cal-status { font-size: 0.85rem; color: var(--muted); }
+.cal-grid button small { display: block; white-space: nowrap; overflow: hidden; font-size: 0.66rem; line-height: 1.1; color: var(--muted); font-weight: 600; }
+.cal-grid .sel small { color: inherit; }
+.from { margin: 0; font-size: 1.05rem; }
+.from b { font-family: var(--font-display); font-size: 1.35rem; }
+.quote { margin: 0; padding: 12px 14px; border-radius: 10px; background: color-mix(in srgb, var(--lagoon) 12%, transparent); font-size: 0.95rem; }
+.quote b { font-family: var(--font-display); font-size: 1.15rem; }
 
-footer { border-top: 1px solid var(--line); padding-block: 32px; font-size: 0.92rem; color: var(--muted); }
+footer { border-top: 1px solid var(--line); padding-block: 32px 96px; font-size: 0.92rem; color: var(--muted); }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
 
-.fab { position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 6; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+.fab { position: fixed; right: calc(84px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 6; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+.wa-fab { position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 6; width: 58px; height: 58px; border-radius: 50%; background: #25D366; color: #fff; display: grid; place-items: center; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+.wa-fab:hover { background: #1ebe5b; }
+.wa-fab svg { width: 32px; height: 32px; }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 </style>
 
@@ -390,6 +401,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
               <li><span>Habitación 6</span><span>4 individuales</span></li>
             </ul>
             <p class="note">Aire acondicionado y Smart TV de 43" en todas las habitaciones. Sala con TV de 70" y sonido Bose.</p>
+            <p class="from" data-from="casa" hidden></p>
             <a class="btn" href="#reservar" data-pick="casa">Consultar la casa completa</a>
           </div>
         </article>
@@ -411,6 +423,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
               <li><span>Habitación 3</span><span>4 individuales o 1 queen + 2 individuales</span></li>
             </ul>
             <p class="note">Limpieza en días alternos, de 9 a 17 h, sin costo extra. Se aceptan mascotas.</p>
+            <p class="from" data-from="villa" hidden></p>
             <a class="btn" href="#reservar" data-pick="villa">Consultar la Villa</a>
           </div>
         </article>
@@ -525,7 +538,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
             <button type="button" id="cal-next" aria-label="Mes siguiente">›</button>
           </div>
           <div class="cal-months" id="cal-months"></div>
-          <div class="cal-legend"><span><i class="k-busy"></i>Ocupado</span><span><i class="k-sel"></i>Sus fechas</span><span>Toque el día de llegada y luego el de salida.</span></div>
+          <div class="cal-legend"><span><i class="k-busy"></i>Ocupado</span><span><i class="k-sel"></i>Sus fechas</span><span id="k-price" hidden>Precios por noche en R$</span><span>Toque el día de llegada y luego el de salida.</span></div>
           <p class="cal-status" id="cal-status">Cargando disponibilidad...</p>
         </div>
       </div>
@@ -546,8 +559,9 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           <label for="name">Su nombre<input type="text" id="name" name="name" autocomplete="name" placeholder="Nombre y apellido" required></label>
         </div>
         <label for="msg">Mensaje (opcional)<textarea id="msg" name="msg" placeholder="Ocasión, mascotas, horario de llegada..."></textarea></label>
+        <p class="quote" id="quote" hidden></p>
         <p class="err" id="err" hidden></p>
-        <button class="btn" type="submit">Armar mensaje para WhatsApp</button>
+        <button class="btn" type="submit">Enviar por WhatsApp</button>
         <div class="out" id="out" hidden>
           <pre id="out-text"></pre>
           <div class="out-actions">
@@ -596,11 +610,13 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 <footer>
   <div class="wrap">
     <span>Mansão Resort Barra · Barra da Tijuca, Río de Janeiro, RJ, Brasil · Hasta 18 huéspedes</span>
+    <span>WhatsApp: <a class="wa-foot" href="https://api.whatsapp.com/send?phone=5521996991888" target="_blank" rel="noopener">+55 21 99699-1888</a></span>
     <span>También en <a href="https://www.airbnb.com.br/rooms/1660888966401908771" target="_blank" rel="noopener">Airbnb (casa completa)</a> y <a href="https://www.airbnb.com.br/rooms/1762494515905389616" target="_blank" rel="noopener">Airbnb (Villa)</a></span>
   </div>
 </footer>
 
 <a class="btn fab" href="#reservar">Reservar</a>
+<a class="wa-fab" id="wa-fab" href="https://api.whatsapp.com/send?phone=5521996991888&amp;text=%C2%A1Hola!%20Vi%20el%20sitio%20de%20Mans%C3%A3o%20Resort%20Barra%20y%20quisiera%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener" aria-label="Escribir por WhatsApp" title="Escribir por WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.04 3C9.4 3 4 8.36 4 14.97c0 2.11.56 4.17 1.62 5.99L4 29l8.24-1.6a12.1 12.1 0 0 0 3.8.62C22.68 28.02 28 22.66 28 16.05 28 9.44 22.68 3 16.04 3zm0 22.9c-1.2 0-2.38-.2-3.5-.59l-.25-.09-4.9.95.98-4.73-.16-.26a9.86 9.86 0 0 1-1.52-5.21c0-5.45 4.44-9.88 9.37-9.88 5.4 0 9.8 4.43 9.8 9.96 0 5.45-4.4 9.85-9.82 9.85zm5.4-7.37c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.48-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.09 3.18 5.06 4.46.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.4-.07-.13-.27-.2-.57-.35z"/></svg></a>
 
 <script>
 // Número do WhatsApp da anfitriã: só dígitos, com 55 + DDD. Trocar antes de publicar.
@@ -684,6 +700,7 @@ const guests = document.getElementById("guests");
 const ci = document.getElementById("checkin");
 const co = document.getElementById("checkout");
 const err = document.getElementById("err");
+const quote = document.getElementById("quote");
 const out = document.getElementById("out");
 const outText = document.getElementById("out-text");
 const wa = document.getElementById("wa");
@@ -713,6 +730,53 @@ const ymd = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")
 const todayYmd = ymd(new Date());
 const isBusy = d => busy.some(([a, b]) => d >= a && d < b);
 const overlaps = (a, b) => busy.some(([x, y]) => a < y && b > x);
+
+// Preços por noite: lidos de /precos.json, que a anfitriã edita no GitHub. Sem valor preenchido, o site não mostra preço.
+const PRICE_TXT = { from: "Desde", night: "por noche", one: "noche", many: "noches", total: "Total estimado", clean: "incluye tarifa de limpieza de", final: "El precio final se confirma por WhatsApp.", min: "Mínimo de {n} noches para estas fechas.", msg: "Valor estimado en el sitio" };
+let PRECOS = null;
+const money = v => new Intl.NumberFormat(LOCALE, { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(v);
+const short = v => new Intl.NumberFormat(LOCALE, { notation: "compact", maximumFractionDigits: 1 }).format(v);
+const num = v => typeof v === "number" && v > 0 ? v : null;
+const hasPrices = st => !!(PRECOS && PRECOS[st] && num(PRECOS[st].noite));
+const seasonFor = d => (PRECOS.temporadas || []).find(t => t.de && t.ate && d >= t.de && d <= t.ate);
+function priceFor(st, d) {
+  if (!hasPrices(st)) return null;
+  const day = (PRECOS.datas || {})[d];
+  if (day && num(day[st])) return day[st];
+  const t = seasonFor(d);
+  if (t && num(t[st])) return t[st];
+  const wd = new Date(d + "T12:00").getDay();
+  if ((wd === 5 || wd === 6) && num(PRECOS[st].sexta_e_sabado)) return PRECOS[st].sexta_e_sabado;
+  return PRECOS[st].noite;
+}
+function minNights(st, d) {
+  const t = seasonFor(d);
+  return (t && num(t.minimo_noites)) || num(PRECOS[st].minimo_noites) || 1;
+}
+function quoteFor(st, a, b) {
+  if (!hasPrices(st) || !a || !b || b <= a) return null;
+  let total = 0, n = 0;
+  for (let d = new Date(a + "T12:00"); ymd(d) < b; d.setDate(d.getDate() + 1)) { total += priceFor(st, ymd(d)); n++; }
+  const clean = num(PRECOS[st].taxa_limpeza) || 0;
+  return { n, total: total + clean, clean, min: minNights(st, a) };
+}
+function showPrices() {
+  document.querySelectorAll("[data-from]").forEach(el => {
+    const st = el.dataset.from;
+    if (!hasPrices(st)) { el.hidden = true; return; }
+    const vals = [PRECOS[st].noite, PRECOS[st].sexta_e_sabado].filter(num);
+    el.innerHTML = `${PRICE_TXT.from} <b>${money(Math.min(...vals))}</b> ${PRICE_TXT.night}`;
+    el.hidden = false;
+  });
+}
+function updateQuote() {
+  const q = PRECOS && quoteFor(form.stay.value, ci.value, co.value);
+  quote.hidden = !q;
+  if (!q) return;
+  quote.innerHTML = `${PRICE_TXT.total}: <b>${money(q.total)}</b> (${q.n} ${q.n === 1 ? PRICE_TXT.one : PRICE_TXT.many}` +
+    (q.clean ? `, ${PRICE_TXT.clean} ${money(q.clean)}` : "") + `). ${PRICE_TXT.final}` +
+    (q.n < q.min ? ` <br><strong>${PRICE_TXT.min.replace("{n}", q.min)}</strong>` : "");
+}
 const dows = [...Array(7)].map((_, i) => new Intl.DateTimeFormat(LOCALE, { weekday: "narrow" }).format(new Date(2026, 1, 1 + i)));
 function renderCal() {
   calMonths.innerHTML = "";
@@ -731,6 +795,7 @@ function renderCal() {
       const b = document.createElement("button"); b.type = "button"; b.textContent = n; b.dataset.d = d;
       if (d < todayYmd) { b.className = "past"; b.disabled = true; }
       else if (isBusy(d)) { b.className = "busy"; b.disabled = true; }
+      else { const v = priceFor(form.stay.value, d); if (v) b.insertAdjacentHTML("beforeend", `<small>${short(v)}</small>`); }
       if (d === ci.value || d === co.value) b.classList.add("sel");
       else if (ci.value && co.value && d > ci.value && d < co.value) b.classList.add("range");
       b.addEventListener("click", () => pickDay(d));
@@ -739,6 +804,8 @@ function renderCal() {
     box.appendChild(grid); calMonths.appendChild(box);
   }
   calPrev.disabled = calOffset === 0;
+  document.getElementById("k-price").hidden = !hasPrices(form.stay.value);
+  updateQuote();
 }
 function pickDay(d) {
   if (!ci.value || co.value || d <= ci.value) { ci.value = d; co.value = ""; }
@@ -748,7 +815,9 @@ function pickDay(d) {
 calPrev.addEventListener("click", () => { if (calOffset > 0) { calOffset--; renderCal(); } });
 calNext.addEventListener("click", () => { if (calOffset < 16) { calOffset++; renderCal(); } });
 [ci, co].forEach(el => el.addEventListener("change", renderCal));
+form.querySelectorAll('input[name="stay"]').forEach(r => r.addEventListener("change", renderCal));
 renderCal();
+fetch("/precos.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(p => { PRECOS = p; showPrices(); renderCal(); }).catch(() => {});
 fetch("/.netlify/functions/disponibilidade").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(data => {
   busy = data.busy || [];
   const when = new Intl.DateTimeFormat(LOCALE, { dateStyle: "short", timeStyle: "short" }).format(new Date(data.updated));
@@ -773,10 +842,13 @@ form.addEventListener("submit", e => {
   let text = `¡Hola! Vi el sitio de Mansão Resort Barra y quisiera consultar disponibilidad.\n\n` +
     `Alojamiento: ${stay}\nCheck-in: ${br(ci.value)}\nCheck-out: ${br(co.value)} (${nights} ${nights === 1 ? "noche" : "noches"})\n` +
     `Huéspedes: ${g}\nNombre: ${form.name.value.trim()}`;
+  const q = PRECOS && quoteFor(form.stay.value, ci.value, co.value);
+  if (q) text += `\n${PRICE_TXT.msg}: ${money(q.total)}`;
   if (form.msg.value.trim()) text += `\n\n${form.msg.value.trim()}`;
   outText.textContent = text;
   wa.href = `https://api.whatsapp.com/send?phone=${WHATSAPP}&text=${encodeURIComponent(text)}`;
   out.hidden = false;
+  window.open(wa.href, "_blank", "noopener");
 });
 
 document.getElementById("copy").addEventListener("click", e => {
