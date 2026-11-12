@@ -733,16 +733,20 @@ const overlaps = (a, b) => busy.some(([x, y]) => a < y && b > x);
 
 // Preços por noite: lidos de /precos.json, que a anfitriã edita no GitHub. Sem valor preenchido, o site não mostra preço.
 const PRICE_TXT = { from: "From", night: "per night", one: "night", many: "nights", total: "Estimated total", off: "with a {p}% discount", clean: "including a cleaning fee of", final: "The final price is confirmed on WhatsApp.", min: "Minimum stay of {n} nights for these dates.", msg: "Estimate shown on the website" };
-let PRECOS = null;
+let PRECOS = null, BEYOND = null;
+// Preços do Beyond Pricing (os mesmos do Airbnb), lidos por /.netlify/functions/precos. Têm prioridade sobre o precos.json.
+const beyondDay = (st, d) => BEYOND && BEYOND[st] && BEYOND[st][d];
 const money = v => new Intl.NumberFormat(LOCALE, { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(v);
 const short = v => new Intl.NumberFormat(LOCALE, { notation: "compact", maximumFractionDigits: 1 }).format(v);
 const num = v => typeof v === "number" && v > 0 ? v : null;
-const hasPrices = st => !!(PRECOS && PRECOS[st] && num(PRECOS[st].noite));
-const seasonFor = d => (PRECOS.temporadas || []).find(t => t.de && t.ate && d >= t.de && d <= t.ate);
+const hasBeyond = st => !!(BEYOND && BEYOND[st] && Object.keys(BEYOND[st]).length);
+const hasPrices = st => hasBeyond(st) || !!(PRECOS && PRECOS[st] && num(PRECOS[st].noite));
+const seasonFor = d => ((PRECOS && PRECOS.temporadas) || []).find(t => t.de && t.ate && d >= t.de && d <= t.ate);
 function priceFor(st, d) {
   if (!hasPrices(st)) return null;
-  const day = (PRECOS.datas || {})[d];
+  const day = ((PRECOS && PRECOS.datas) || {})[d];
   if (day && num(day[st])) return day[st];
+  if (hasBeyond(st)) { const b = beyondDay(st, d); return b ? b.p : null; }
   const t = seasonFor(d);
   if (t) return num(t[st]); // temporada sem valor = preço sob consulta
   const wd = new Date(d + "T12:00").getDay();
@@ -750,8 +754,8 @@ function priceFor(st, d) {
   return PRECOS[st].noite;
 }
 function minNights(st, d) {
-  const t = seasonFor(d);
-  return (t && num(t.minimo_noites)) || num(PRECOS[st].minimo_noites) || 1;
+  const t = seasonFor(d), b = beyondDay(st, d);
+  return (t && num(t.minimo_noites)) || (b && num(b.m)) || num(PRECOS && PRECOS[st] && PRECOS[st].minimo_noites) || 1;
 }
 function quoteFor(st, a, b) {
   if (!hasPrices(st) || !a || !b || b <= a) return null;
@@ -765,22 +769,23 @@ function quoteFor(st, a, b) {
     const t = seasonFor(ymd(d)); if (t && t.sem_desconto) noOff = true;
     min = Math.max(min, minNights(st, ymd(d)));
   }
-  const off = noOff ? 0 : (PRECOS.descontos || []).filter(x => n >= x.a_partir_de_noites).reduce((m, x) => Math.max(m, x.porcentagem || 0), 0);
+  const off = noOff ? 0 : ((PRECOS && PRECOS.descontos) || []).filter(x => n >= x.a_partir_de_noites).reduce((m, x) => Math.max(m, x.porcentagem || 0), 0);
   total = Math.round(total * (1 - off / 100));
-  const clean = num(PRECOS[st].taxa_limpeza) || 0;
+  const clean = num(PRECOS && PRECOS[st] && PRECOS[st].taxa_limpeza) || 0;
   return { n, off, total: total + clean, clean, min };
 }
 function showPrices() {
   document.querySelectorAll("[data-from]").forEach(el => {
     const st = el.dataset.from;
     if (!hasPrices(st)) { el.hidden = true; return; }
-    const vals = [PRECOS[st].noite, PRECOS[st].sexta_e_sabado].filter(num);
+    const vals = hasBeyond(st) ? Object.values(BEYOND[st]).map(x => x.p).filter(num)
+      : [PRECOS[st].noite, PRECOS[st].sexta_e_sabado].filter(num);
     el.innerHTML = `${PRICE_TXT.from} <b>${money(Math.min(...vals))}</b> ${PRICE_TXT.night}`;
     el.hidden = false;
   });
 }
 function updateQuote() {
-  const q = PRECOS && quoteFor(form.stay.value, ci.value, co.value);
+  const q = quoteFor(form.stay.value, ci.value, co.value);
   quote.hidden = !q;
   if (!q) return;
   quote.innerHTML = `${PRICE_TXT.total}: <b>${money(q.total)}</b> (${q.n} ${q.n === 1 ? PRICE_TXT.one : PRICE_TXT.many}` +
@@ -829,6 +834,7 @@ calNext.addEventListener("click", () => { if (calOffset < 16) { calOffset++; ren
 form.querySelectorAll('input[name="stay"]').forEach(r => r.addEventListener("change", renderCal));
 renderCal();
 fetch("/precos.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(p => { PRECOS = p; showPrices(); renderCal(); }).catch(() => {});
+fetch("/.netlify/functions/precos").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(p => { BEYOND = p; showPrices(); renderCal(); }).catch(() => {});
 fetch("/.netlify/functions/disponibilidade").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(data => {
   busy = data.busy || [];
   const when = new Intl.DateTimeFormat(LOCALE, { dateStyle: "short", timeStyle: "short" }).format(new Date(data.updated));
@@ -853,7 +859,7 @@ form.addEventListener("submit", e => {
   let text = `Hello! I saw the Mansão Resort Barra website and would like to check availability.\n\n` +
     `Stay: ${stay}\nCheck-in: ${br(ci.value)}\nCheck-out: ${br(co.value)} (${nights} ${nights === 1 ? "night" : "nights"})\n` +
     `Guests: ${g}\nName: ${form.name.value.trim()}`;
-  const q = PRECOS && quoteFor(form.stay.value, ci.value, co.value);
+  const q = quoteFor(form.stay.value, ci.value, co.value);
   if (q) text += `\n${PRICE_TXT.msg}: ${money(q.total)}`;
   if (form.msg.value.trim()) text += `\n\n${form.msg.value.trim()}`;
   outText.textContent = text;
