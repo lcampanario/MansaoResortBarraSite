@@ -732,7 +732,7 @@ const isBusy = d => busy.some(([a, b]) => d >= a && d < b);
 const overlaps = (a, b) => busy.some(([x, y]) => a < y && b > x);
 
 // Preços por noite: lidos de /precos.json, que a anfitriã edita no GitHub. Sem valor preenchido, o site não mostra preço.
-const PRICE_TXT = { from: "From", night: "per night", one: "night", many: "nights", total: "Estimated total", clean: "including a cleaning fee of", final: "The final price is confirmed on WhatsApp.", min: "Minimum stay of {n} nights for these dates.", msg: "Estimate shown on the website" };
+const PRICE_TXT = { from: "From", night: "per night", one: "night", many: "nights", total: "Estimated total", off: "with a {p}% discount", clean: "including a cleaning fee of", final: "The final price is confirmed on WhatsApp.", min: "Minimum stay of {n} nights for these dates.", msg: "Estimate shown on the website" };
 let PRECOS = null;
 const money = v => new Intl.NumberFormat(LOCALE, { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(v);
 const short = v => new Intl.NumberFormat(LOCALE, { notation: "compact", maximumFractionDigits: 1 }).format(v);
@@ -744,7 +744,7 @@ function priceFor(st, d) {
   const day = (PRECOS.datas || {})[d];
   if (day && num(day[st])) return day[st];
   const t = seasonFor(d);
-  if (t && num(t[st])) return t[st];
+  if (t) return num(t[st]); // temporada sem valor = preço sob consulta
   const wd = new Date(d + "T12:00").getDay();
   if ((wd === 5 || wd === 6) && num(PRECOS[st].sexta_e_sabado)) return PRECOS[st].sexta_e_sabado;
   return PRECOS[st].noite;
@@ -756,9 +756,19 @@ function minNights(st, d) {
 function quoteFor(st, a, b) {
   if (!hasPrices(st) || !a || !b || b <= a) return null;
   let total = 0, n = 0;
-  for (let d = new Date(a + "T12:00"); ymd(d) < b; d.setDate(d.getDate() + 1)) { total += priceFor(st, ymd(d)); n++; }
+  for (let d = new Date(a + "T12:00"); ymd(d) < b; d.setDate(d.getDate() + 1)) {
+    const v = priceFor(st, ymd(d)); if (!v) return null; total += v; n++;
+  }
+  // Sem desconto se alguma noite cair numa temporada marcada com "sem_desconto".
+  let noOff = false, min = 1;
+  for (let d = new Date(a + "T12:00"); ymd(d) < b; d.setDate(d.getDate() + 1)) {
+    const t = seasonFor(ymd(d)); if (t && t.sem_desconto) noOff = true;
+    min = Math.max(min, minNights(st, ymd(d)));
+  }
+  const off = noOff ? 0 : (PRECOS.descontos || []).filter(x => n >= x.a_partir_de_noites).reduce((m, x) => Math.max(m, x.porcentagem || 0), 0);
+  total = Math.round(total * (1 - off / 100));
   const clean = num(PRECOS[st].taxa_limpeza) || 0;
-  return { n, total: total + clean, clean, min: minNights(st, a) };
+  return { n, off, total: total + clean, clean, min };
 }
 function showPrices() {
   document.querySelectorAll("[data-from]").forEach(el => {
@@ -774,6 +784,7 @@ function updateQuote() {
   quote.hidden = !q;
   if (!q) return;
   quote.innerHTML = `${PRICE_TXT.total}: <b>${money(q.total)}</b> (${q.n} ${q.n === 1 ? PRICE_TXT.one : PRICE_TXT.many}` +
+    (q.off ? `, ${PRICE_TXT.off.replace("{p}", q.off)}` : "") +
     (q.clean ? `, ${PRICE_TXT.clean} ${money(q.clean)}` : "") + `). ${PRICE_TXT.final}` +
     (q.n < q.min ? ` <br><strong>${PRICE_TXT.min.replace("{n}", q.min)}</strong>` : "");
 }

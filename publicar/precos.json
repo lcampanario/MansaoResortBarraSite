@@ -1,10 +1,16 @@
 {
-  "_como_editar": "Valores em reais por noite, só números (ex.: 2500). Deixe null para esconder o preço no site. 'sexta_e_sabado' vale para as noites de sexta e sábado. Em 'temporadas', 'de' e 'ate' são a primeira e a última NOITE do período. Em 'datas', dá para fixar o preço de um dia específico, ex.: \"2026-12-24\": {\"casa\": 6000, \"villa\": 3000}.",
-  "casa": { "noite": null, "sexta_e_sabado": null, "minimo_noites": 2, "taxa_limpeza": 0 },
-  "villa": { "noite": null, "sexta_e_sabado": null, "minimo_noites": 2, "taxa_limpeza": 0 },
+  "_como_editar": "Valores em reais por noite, só números (ex.: 7500). null esconde o preço. 'sexta_e_sabado' vale para as noites de sexta e sábado (null = mesmo valor da semana). Em 'temporadas', 'de' e 'ate' são a primeira e a última NOITE do período; valor null = preço sob consulta nessas datas; a primeira temporada da lista que contém a data vale. 'sem_desconto': true tira os descontos por estadia. Em 'datas', dá para fixar o preço de um dia, ex.: \"2026-12-24\": {\"casa\": 9000}. 'descontos' valem para as duas acomodações.",
+  "casa": { "noite": 7500, "sexta_e_sabado": null, "minimo_noites": 2, "taxa_limpeza": 0 },
+  "villa": { "noite": 4100, "sexta_e_sabado": null, "minimo_noites": 2, "taxa_limpeza": 0 },
+  "descontos": [
+    { "a_partir_de_noites": 3, "porcentagem": 5 },
+    { "a_partir_de_noites": 4, "porcentagem": 10 },
+    { "a_partir_de_noites": 7, "porcentagem": 15 }
+  ],
   "temporadas": [
-    { "nome": "Réveillon", "de": "2026-12-28", "ate": "2027-01-01", "casa": null, "villa": null, "minimo_noites": 5 },
-    { "nome": "Carnaval", "de": "2027-02-05", "ate": "2027-02-09", "casa": null, "villa": null, "minimo_noites": 4 }
+    { "nome": "Réveillon", "de": "2026-12-28", "ate": "2027-01-01", "casa": 18000, "villa": null, "minimo_noites": 5, "sem_desconto": true },
+    { "nome": "Carnaval", "de": "2027-02-05", "ate": "2027-02-09", "casa": 18000, "villa": null, "minimo_noites": 5, "sem_desconto": true },
+    { "nome": "Janeiro e fevereiro", "de": "2027-01-02", "ate": "2027-02-28", "casa": 10000, "villa": 5000 }
   ],
   "datas": {}
 }
