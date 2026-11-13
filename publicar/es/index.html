@@ -313,12 +313,12 @@ dialog.lb::backdrop { background: rgba(5, 14, 16, 0.88); }
 .cal-grid button:focus-visible { outline: 2px solid var(--sun); }
 .cal-grid button[disabled] { cursor: default; }
 .cal-grid .past { color: var(--muted); opacity: .45; }
-.cal-grid .busy { color: var(--muted); text-decoration: line-through; background: repeating-linear-gradient(135deg, transparent 0 4px, var(--line) 4px 5px); }
+.cal-grid .busy { color: #8a2a1f; font-weight: 600; text-decoration: line-through 2px #c0392b; background: repeating-linear-gradient(135deg, rgba(192,57,43,.10) 0 4px, rgba(192,57,43,.45) 4px 6px); }
 .cal-grid .sel, .cal-grid .sel:hover { background: var(--lagoon); color: var(--lagoon-ink); }
 .cal-grid .range { background: color-mix(in srgb, var(--lagoon) 18%, transparent); }
 .cal-legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.82rem; color: var(--muted); }
 .cal-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; border: 1px solid var(--line); }
-.cal-legend .k-busy { background: repeating-linear-gradient(135deg, transparent 0 3px, var(--muted) 3px 4px); }
+.cal-legend .k-busy { background: repeating-linear-gradient(135deg, rgba(192,57,43,.10) 0 3px, rgba(192,57,43,.6) 3px 5px); border-color: #c0392b; }
 .cal-legend .k-sel { background: var(--lagoon); border-color: var(--lagoon); }
 .cal-status { font-size: 0.85rem; color: var(--muted); }
 .cal-grid button small { display: block; white-space: nowrap; overflow: hidden; font-size: 0.66rem; line-height: 1.1; color: var(--muted); font-weight: 600; }
