@@ -355,6 +355,8 @@ def full_doc(s, lang, seo_title=True, embed=True):
         head = re.sub(r"<title>.*?</title>", f"<title>{SEO_TITLE[lang]}</title>", head, count=1)
     return (f'<!doctype html>\n<html lang="{LANG_ATTR[lang]}">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+            '<script async src="https://www.googletagmanager.com/gtag/js?id=AW-875463976"></script>\n'
+            '<script src="/ads.js"></script>\n'
             f'{head}</head>\n<body>\n{body}\n</body>\n</html>\n')
 
 def write(path, text):
