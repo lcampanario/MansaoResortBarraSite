@@ -783,11 +783,13 @@ ci.addEventListener("change", () => { co.min = ci.value; });
 const LOCALE = document.documentElement.lang || "pt-BR";
 const calMonths = document.getElementById("cal-months"), calStatus = document.getElementById("cal-status");
 const calPrev = document.getElementById("cal-prev"), calNext = document.getElementById("cal-next");
-let busy = [], calOffset = 0;
+let BUSY = { casa: [], villa: [] }, calOffset = 0;
+// Cada acomodação tem o seu calendário de ocupação.
+const busyNow = () => BUSY[form.stay.value] || [];
 const ymd = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 const todayYmd = ymd(new Date());
-const isBusy = d => busy.some(([a, b]) => d >= a && d < b);
-const overlaps = (a, b) => busy.some(([x, y]) => a < y && b > x);
+const isBusy = d => busyNow().some(([a, b]) => d >= a && d < b);
+const overlaps = (a, b) => busyNow().some(([x, y]) => a < y && b > x);
 
 // Preços por noite: lidos de /precos.json, que a anfitriã edita no GitHub. Sem valor preenchido, o site não mostra preço.
 const PRICE_TXT = { from: "From", night: "per night", one: "night", many: "nights", total: "Estimated total", off: "with a {p}% discount", clean: "including a cleaning fee of", final: "The final price is confirmed on WhatsApp.", min: "Minimum stay of {n} nights for these dates.", msg: "Estimate shown on the website" };
@@ -894,7 +896,7 @@ renderCal();
 fetch("/precos.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(p => { PRECOS = p; showPrices(); renderCal(); }).catch(() => {});
 fetch("/.netlify/functions/precos").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(p => { BEYOND = p; showPrices(); renderCal(); }).catch(() => {});
 fetch("/.netlify/functions/disponibilidade").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(data => {
-  busy = data.busy || [];
+  BUSY = { casa: data.casa || data.busy || [], villa: data.villa || data.busy || [] };
   const when = new Intl.DateTimeFormat(LOCALE, { dateStyle: "short", timeStyle: "short" }).format(new Date(data.updated));
   calStatus.textContent = (data.complete ? "Updated " : "Partially updated ") + when + ".";
   renderCal();

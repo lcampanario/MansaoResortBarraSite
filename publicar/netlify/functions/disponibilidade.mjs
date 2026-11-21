@@ -1,5 +1,5 @@
 // Lê os calendários (iCal) dos dois anúncios do Airbnb e devolve as datas ocupadas em JSON.
-// O site chama /.netlify/functions/disponibilidade. A resposta fica em cache por 1 hora,
+// O site chama /.netlify/functions/disponibilidade. A resposta fica em cache por 30 minutos,
 // então o calendário do site se atualiza sozinho várias vezes por dia.
 //
 // Cole aqui os links "Exportar calendário" de cada anúncio (Airbnb > Calendário > Disponibilidade
@@ -19,7 +19,8 @@ export function parseIcal(text) {
   let ev = null;
   for (const line of lines) {
     if (line === "BEGIN:VEVENT") ev = {};
-    else if (line === "END:VEVENT") { if (ev && ev.start && ev.end) out.push([ev.start, ev.end]); ev = null; }
+    else if (line === "END:VEVENT") { if (ev && ev.start && ev.end) out.push({ start: ev.start, end: ev.end, reserved: /reserved/i.test(ev.summary || "") }); ev = null; }
+    else if (ev && line.startsWith("SUMMARY")) ev.summary = line.slice(line.indexOf(":") + 1);
     else if (ev) {
       const m = line.match(/^(DTSTART|DTEND)[^:]*:(\d{8})/);
       if (m) ev[m[1] === "DTSTART" ? "start" : "end"] = day(m[2]);
@@ -46,20 +47,28 @@ export default async () => {
     if (!r.ok) throw new Error(`${name}: HTTP ${r.status}`);
     return parseIcal(await r.text());
   }));
+  const ev = Object.fromEntries(sources.map(([name], i) => [name, results[i].status === "fulfilled" ? results[i].value : []]));
   const ok = results.filter(r => r.status === "fulfilled");
-  // As duas acomodações dividem a mesma casa: uma reserva em qualquer anúncio bloqueia as duas.
-  const busy = merge(ok.flatMap(r => r.value));
+  const all = e => e.map(x => [x.start, x.end]);
+  const reserved = e => e.filter(x => x.reserved).map(x => [x.start, x.end]);
+  // Cada acomodação usa o próprio calendário inteiro (reservas + bloqueios manuais).
+  // Uma RESERVA no outro anúncio também bloqueia, porque as duas dividem a mesma casa.
+  // Bloqueios manuais do outro anúncio (ex.: Villa fechada no Réveillon) não bloqueiam.
+  const casa = merge([...all(ev.casa || []), ...reserved(ev.villa || [])]);
+  const villa = merge([...all(ev.villa || []), ...reserved(ev.casa || [])]);
   const body = {
     updated: new Date().toISOString(),
     complete: sources.length > 0 && ok.length === sources.length,
-    busy,
+    casa,
+    villa,
+    busy: merge([...casa, ...villa]),
   };
   return new Response(JSON.stringify(body), {
     status: sources.length ? 200 : 503,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "public, max-age=300",
-      "Netlify-CDN-Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+      "Netlify-CDN-Cache-Control": "public, s-maxage=1800",
     },
   });
 };
